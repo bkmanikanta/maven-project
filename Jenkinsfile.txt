@@ -1,0 +1,29 @@
+pipeline 
+{
+     agent any
+	 stages
+	    {
+		stage('CheckoutcodeinGIt')
+		{
+		  steps {
+		  git branch: 'master',url: ''
+		  }
+		 }
+		 stage('wardeploy')
+		  {
+		       steps {
+			      sh "/bin/mvn clean package"
+				}
+			}
+			stage(deploymenttomcat')
+			{
+			  steps
+			  {
+			    sshagent([' '])
+				 {
+				sh "scp -o StrictHostKeyChecking=no ./webapp/target/*.war ec2-user@3.83.67.244:/usr/local/apache-tomcat-9.0.46/webapps/"
+				}
+			}
+		}
+	}
+}
